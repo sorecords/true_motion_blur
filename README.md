@@ -15,7 +15,7 @@ Add-on creates and DELETES temporary nodes, files and folders.
 Be careful:
   - If you have folders named "\_True_Motion_Blur_tmp" or "TMB Output"
     in your project or render directory
-    they will be DELETED, including all their subfolders and files in them!
+    they will be completely DELETED from your computer, including all their subfolders and files in them!
   - If you have Image or Alpha Over nodes in your Compositor with
     name starting with "TMB" (e.g. "TMB_Mix") they will be also deleted!
 
