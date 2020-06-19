@@ -57,6 +57,8 @@ to start render.
 to display render results properly), turns on "Use nodes" and "Backdrop" buttons
 - If there are nodes in Compositor add-on collect all enabled Render Layers outputs whose links
 lead to Composite or File Outputs nodes
+- If "Render Passes" checkbox is checked or if file format in the scene render image settings is set to "Open EXR Multilayer"
+collect all enabled Render Layers outputs no matter if theit links lead anywhere or not
 - For each active links add-on creates:
     - creates generated Blender Image node to store render results to
     - creates Alpha Over node to switch between Image and original Render Layers output
@@ -74,9 +76,7 @@ lead to Composite or File Outputs nodes
     - if not renders just mixed results
     - if Render Animation was launched saves the frame
 - Clean up:
-    - unmute all temporary muted nodes
+    - unmutes all temporary muted nodes
+    - restores all deleted nodes
     - deletes all temporary created nodes except images with the latest mixed results and Alpha Over mix nodes
     - deletes all temporary files and folders from disc
-
-
-
