@@ -27,7 +27,8 @@ bl_info = {
     "blender": (2, 83, 0),
     "location": "Render Settings > True Motion Blur",
     "description": "True subframe motion blur for Eevee",
-    "warning": "May delete your subfolders in render directory if names match",
+    "warning": "Creates and deletes folders and files in Blender tmp directory.\
+ Changes Compositor nodes (see Readme file)",
     "wiki_url": "https://github.com/sorecords/true_motion_blur/blob/master/README.md",
     "tracker_url": "https://github.com/sorecords/true_motion_blur/issues",
     "category": "Render"
