@@ -80,3 +80,5 @@ collect all enabled Render Layers outputs no matter if theit links lead anywhere
     - restores all deleted nodes
     - deletes all temporary created nodes except images with the latest mixed results and Alpha Over mix nodes
     - deletes all temporary files and folders from disc
+
+At the moment add-on doesn't support exporting animation as video-files like avi, mov, etc., only image-sequences are supported.
