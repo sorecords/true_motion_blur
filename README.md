@@ -1,6 +1,7 @@
 # TRUE MOTION BLUR
 Free subframes-based motion blur add-on
 for BLENDER 2.8 EEVEE and WORKBENCH render engines
+Version 1.0.1.
 
 For each scene frame calculates and renders several subframes based on add-on's settings
 and blends them together to a final frame.
@@ -13,11 +14,22 @@ and blends them together to a final frame.
 # !!!WARNING!!!
 Add-on creates and DELETES temporary nodes, files and folders.
 Be careful:
-  - If you have folders named "\_True_Motion_Blur_tmp" or "TMB Output"
-    in your project or render directory
+  - If you have folders named "\_True_Motion_Blur_tmp" or "\_TMB_Output"
+    in your Blender default temporary directory (e.g. C:\users\username\AppData\local\Temp for Windows)
     they will be completely DELETED from your computer, including all their subfolders and files in them!
   - If you have Image or Alpha Over nodes in your Compositor with
     name starting with "TMB" (e.g. "TMB_Mix") they will be also deleted!
+  - Add-on currently doesn't support render in AVI JPEG, AVI Raw and FFmpeg video.
+    If you need to render animation please render image sequences instead.
+  - When render animation don't forget to set any certain render output directory in Output Properties tab -> Output ->
+    Output Path tab, otherwise render results may be not saved or in some specific cases it may cause errors  
+
+# New in this version:
+  - Now add-on stores its temporary files and folders for subframe and frame render results in the
+    Blender default temporary directory instead of storing them in project folder or render folder.
+    It should help to prevent some errors in case scene render output path hasn't been changed from default
+  - Fixed error when user tries to render in AVI JPEG, AVI Raw and FFmpeg video file formats: now Blender raises Warning
+    instead of error
 
 # Install
 1. Download zip-archive from github, don't unpack it!
