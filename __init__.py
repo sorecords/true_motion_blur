@@ -23,7 +23,7 @@
 bl_info = {
     "name": "True Motion Blur",
     "author": "Andrey Sokolov",
-    "version": (1, 0, 0),
+    "version": (1, 0, 1),
     "blender": (2, 83, 0),
     "location": "Render Settings > True Motion Blur",
     "description": "True subframe motion blur for Eevee",
