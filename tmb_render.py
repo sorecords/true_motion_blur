@@ -752,13 +752,25 @@ class TMB_Render(TMB_RenderHelpers, bpy.types.Operator):
  to render animation, you may render image sequences."
             bpy.ops.tmb.warning('INVOKE_DEFAULT', type = 'ERROR', msg=_msg)
             return {'CANCELLED'}
+        if not [obj for obj in sc.objects if obj.type == 'CAMERA']:
+            _msg = f'Error: No camera found in scene "{sc.name}"'
+            bpy.ops.tmb.warning('INVOKE_DEFAULT', type = 'ERROR', msg=_msg)
+            return {'CANCELLED'}
         bpy.ops.tmb.setup(animation=self.animation)
         self.structure()
         if not self.project['composite'].inputs[0].links:
+            bpy.ops.tmb.restore()
+            _nt = self.sc.node_tree
+            if '_TMB_Output' in _nt.nodes:
+                _nt.nodes.remove(self.sc.node_tree.nodes['_TMB_Output'])
             _msg = "No Composite output. Can't render"
             bpy.ops.tmb.warning('INVOKE_DEFAULT', type = 'ERROR', msg=_msg)
-            return {'CANCELLED'}
+            return {'FINISHED'}
         if not [rl for rl in self.project['rlayers'] if rl.scene.view_layers[rl.layer].use]:
+            bpy.ops.tmb.restore()
+            _nt = self.sc.node_tree
+            if '_TMB_Output' in _nt.nodes:
+                _nt.nodes.remove(self.sc.node_tree.nodes['_TMB_Output'])
             _msg = "All render layers disabled for rendering. Can't render"
             bpy.ops.tmb.warning('INVOKE_DEFAULT', type = 'ERROR', msg=_msg)
             return {'CANCELLED'}
