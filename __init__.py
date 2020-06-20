@@ -75,12 +75,12 @@ def register():
 def unregister():
     op = bpy.types.TMB_OT_store
     op.enable = False
-    from true_motion_blur.tmb_uninstall import TMB_KeyconfigRestore
+    from .tmb_uninstall import TMB_KeyconfigRestore
     register_class(TMB_KeyconfigRestore)
     bpy.ops.tmb.keyconfig_restore()
     for i in reversed(classes):
         unregister_class(i)
-    from true_motion_blur.tmb_uninstall import TOPBAR_MT_render
+    from .tmb_uninstall import TOPBAR_MT_render
     register_class(TOPBAR_MT_render)
     unregister_class(TMB_KeyconfigRestore)
     
