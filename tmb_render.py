@@ -546,15 +546,17 @@ class TMB_RenderHelpers(TMB_RenderVariables, bpy.types.Operator):
     def img_to_path(self):
         '''Move images from temp. File Output folder to scene render folder'''
         
-        _dest = self.project['path'] #------------------------destination folder
-        _source = pathlib.os.path.join(_dest, 'TMB_Output') #------source folder
+        _dest = self.project['render_path'] #-----------------destination folder
+        _tmp = self.project['path'] #---------------------------subframes folder
+        _source = pathlib.os.path.join(_tmp, '_TMB_Output') #-------source folder
         _spath = pathlib.Path(_source)
         if not _spath.is_dir():
-            for child in pathlib.Path(_dest).glob('*'):
-                if child.is_file():
-                    _new_name = str(child).replace( 'TMB_Output',
+            for child in pathlib.Path(_tmp).glob('*'):
+                if child.is_file() and '_TMB_Output' in str(child):
+                    _new_name = str(child).replace( '_TMB_Output',
                                                 self.project['base_name'])
                     child.rename(_new_name)
+                    shutil.move(_new_name, _dest)
             return
         for child in _spath.glob('*'):
             if child.is_file():
@@ -742,16 +744,36 @@ class TMB_Render(TMB_RenderHelpers, bpy.types.Operator):
             self.cleanup()
             return {'FINISHED'}
         self.cleanup()
+        if sc.render.image_settings.file_format in (
+                                            'AVI_JPEG', 'AVI_RAW', 'FFMPEG'):
+            _msg = "Sorry!\nTrue Motion Blur currently doesn't support render\
+ in\n\"AVI JPEG\", \"AVI Raw\" and \"FFmpeg video\" File Formats.\n\nPlease\
+ change Output File Format in\nOutput Properties -> Output\n\nTip: If you need\
+ to render animation, you may render image sequences."
+            bpy.ops.tmb.warning('INVOKE_DEFAULT', type = 'ERROR', msg=_msg)
+            return {'CANCELLED'}
+        if not [obj for obj in sc.objects if obj.type == 'CAMERA']:
+            _msg = f'Error: No camera found in scene "{sc.name}"'
+            bpy.ops.tmb.warning('INVOKE_DEFAULT', type = 'ERROR', msg=_msg)
+            return {'CANCELLED'}
         bpy.ops.tmb.setup(animation=self.animation)
         self.structure()
         if not self.project['composite'].inputs[0].links:
+            bpy.ops.tmb.restore()
+            _nt = self.sc.node_tree
+            if '_TMB_Output' in _nt.nodes:
+                _nt.nodes.remove(self.sc.node_tree.nodes['_TMB_Output'])
             _msg = "No Composite output. Can't render"
             bpy.ops.tmb.warning('INVOKE_DEFAULT', type = 'ERROR', msg=_msg)
-            return {'CANCELLED'}
+            return {'FINISHED'}
         if not [rl for rl in self.project['rlayers'] if rl.scene.view_layers[rl.layer].use]:
-            _msg = "All render layers disabled for rendering. Can't render"
+            bpy.ops.tmb.restore()
+            _nt = self.sc.node_tree
+            if '_TMB_Output' in _nt.nodes:
+                _nt.nodes.remove(self.sc.node_tree.nodes['_TMB_Output'])
+            _msg = "All render layers are disabled for rendering"
             bpy.ops.tmb.warning('INVOKE_DEFAULT', type = 'ERROR', msg=_msg)
-            return {'CANCELLED'}
+            return {'FINISHED'}
         self.get_frames()
         bpy.app.handlers.render_complete.append(self.handler_complete)
         bpy.app.handlers.render_pre.append(self.handler_pre)
