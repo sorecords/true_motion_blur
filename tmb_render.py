@@ -747,9 +747,9 @@ class TMB_Render(TMB_RenderHelpers, bpy.types.Operator):
         if sc.render.image_settings.file_format in (
                                             'AVI_JPEG', 'AVI_RAW', 'FFMPEG'):
             _msg = "Sorry!\nTrue Motion Blur currently doesn't support render\
- in those File Formats:\nAVI JPEG, AVI Raw and FFmpeg video.\n\nPlease change\
- Output File Format in Output Properties tab -> Output\n\nTip: If you need to\
- render animation, you may render image sequences instead."
+ in\n\"AVI JPEG\", \"AVI Raw\" and \"FFmpeg video\" File Formats.\n\nPlease\
+ change Output File Format in\nOutput Properties -> Output\n\nTip: If you need\
+ to render animation, you may render image sequences."
             bpy.ops.tmb.warning('INVOKE_DEFAULT', type = 'ERROR', msg=_msg)
             return {'CANCELLED'}
         bpy.ops.tmb.setup(animation=self.animation)
