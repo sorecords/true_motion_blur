@@ -30,6 +30,7 @@ Be careful:
     It should help to prevent some errors in case scene render output path hasn't been changed from default
   - Fixed error when user tries to render in AVI JPEG, AVI Raw and FFmpeg video file formats: now Blender raises Warning
     instead of error
+  - Fixed disabling/enabling back add-on in Preferences -> Add-ons error
 
 # Install
 1. Download zip-archive from github, don't unpack it!
