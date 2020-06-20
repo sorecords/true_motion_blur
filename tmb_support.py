@@ -398,14 +398,18 @@ class TMB_Store(bpy.types.Operator):
         _prj["base_name"] = bpy.path.display_name_from_filepath(
                                                             _prj["user_path"]
                                                             )
+        ######################################################################
         if not _prj["base_name"]:
-            _prj["path"] = bpy.path.abspath(_prj["user_path"])
+            _prj["render_path"] = bpy.path.abspath(_prj["user_path"])
         else:
-            _prj["path"] = bpy.path.abspath(
+            _prj["render_path"] = bpy.path.abspath(
                 str(_prj["user_path"]).replace(
                     _prj["base_name"], ""
                     )
             )
+        _prj["path"] = bpy.path.abspath(
+                            context.preferences.filepaths.temporary_directory)
+        ############################################################################
         _prj["format"] = self.scene.render.image_settings.file_format
         _rlscenes = self.get_rlayers_and_scenes()
         _prj["rlayers"] = _rlscenes[0]
@@ -896,7 +900,7 @@ class TMB_SaveBuffers(TMB_Helpers, bpy.types.Operator):
             _proj_dir = pathlib.Path(str(_proj_dir))
             _proj_dir = str(_proj_dir.parents[0])
         _tmb_dir = pathlib.os.path.join(_proj_dir, "_True_Motion_Blur_tmp")
-        _main_out = pathlib.os.path.join(_proj_dir, 'TMB_Output')
+        _main_out = pathlib.os.path.join(_proj_dir, '_TMB_Output')
         if pathlib.os.path.exists(_tmb_dir):
             self.clear_path(_tmb_dir)
         if  pathlib.os.path.exists(_main_out):
@@ -951,12 +955,12 @@ class TMB_SaveBuffers(TMB_Helpers, bpy.types.Operator):
         '''Add main File Output which will act as a render result writer'''
         
         _imgsets = self.project['image_settings']
-        _fo = self.get_fo("TMB_Output")
+        _fo = self.get_fo("_TMB_Output")
         self.restore['tmb_f_outs'].remove(_fo)
         self.project['output'] = _fo
         _frm = _fo.format
         
-        _fo.base_path = pathlib.os.path.join(self.project['path'],'TMB_Output')
+        _fo.base_path = pathlib.os.path.join(self.project['path'],'_TMB_Output')
         _frm.file_format = _imgsets["file_format"]
         if _imgsets["cineon_black"]:
             _frm.cineon_black = _imgsets["cineon_black"]
@@ -1470,11 +1474,11 @@ class TMB_Restore(TMB_Helpers, bpy.types.Operator):
         '''Remove temporary main out folder from disc'''
         
         _dest = self.project['path']
-        _source = pathlib.os.path.join(_dest, 'TMB_Output')
+        _source = pathlib.os.path.join(_dest, '_TMB_Output')
         _spath = pathlib.Path(_source)
         if not _spath.is_dir():
             return
-        _spath.rmdir()
+        self.clear_path(_spath)
     
     def cleanup(self):
         '''Remove temporary subframes folders from disc'''

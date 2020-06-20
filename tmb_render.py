@@ -546,15 +546,17 @@ class TMB_RenderHelpers(TMB_RenderVariables, bpy.types.Operator):
     def img_to_path(self):
         '''Move images from temp. File Output folder to scene render folder'''
         
-        _dest = self.project['path'] #------------------------destination folder
-        _source = pathlib.os.path.join(_dest, 'TMB_Output') #------source folder
+        _dest = self.project['render_path'] #-----------------destination folder
+        _tmp = self.project['path'] #---------------------------subframes folder
+        _source = pathlib.os.path.join(_tmp, '_TMB_Output') #-------source folder
         _spath = pathlib.Path(_source)
         if not _spath.is_dir():
-            for child in pathlib.Path(_dest).glob('*'):
-                if child.is_file():
-                    _new_name = str(child).replace( 'TMB_Output',
+            for child in pathlib.Path(_tmp).glob('*'):
+                if child.is_file() and '_TMB_Output' in str(child):
+                    _new_name = str(child).replace( '_TMB_Output',
                                                 self.project['base_name'])
                     child.rename(_new_name)
+                    shutil.move(_new_name, _dest)
             return
         for child in _spath.glob('*'):
             if child.is_file():
