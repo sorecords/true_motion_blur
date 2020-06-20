@@ -22,7 +22,11 @@ Be careful:
   - Add-on currently doesn't support render in AVI JPEG, AVI Raw and FFmpeg video.
     If you need to render animation please render image sequences instead.
   - When render animation don't forget to set any certain render output directory in Output Properties tab -> Output ->
-    Output Path tab, otherwise render results may be not saved or in some specific cases it may cause errors  
+    Output Path tab, otherwise render results may be not saved or in some specific cases it may cause errors
+  - In some cases when Cycles and Eevee scenes are mixed in Compositor and rendered simultaneously it
+    may cause Blender internal "Exception Access Violated" error and crash Blender. Assumably it happens because previous
+    render operator doesn't release GPU when the next launches, and unfortunately there's no handler in Blender API which
+    could allow to fix it. So in some cases you may need to render such scenes separately and combine them later on as image sequences.
 
 # New in this version:
   - Now add-on stores its temporary files and folders for subframe and frame render results in the
@@ -93,5 +97,3 @@ collect all enabled Render Layers outputs no matter if theit links lead anywhere
     - restores all deleted nodes
     - deletes all temporary created nodes except images with the latest mixed results and Alpha Over mix nodes
     - deletes all temporary files and folders from disc
-
-At the moment add-on doesn't support exporting animation as video-files like avi, mov, etc., only image-sequences are supported.
