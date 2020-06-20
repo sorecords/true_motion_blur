@@ -63,7 +63,9 @@ class TMB_Store(bpy.types.Operator):
             "frame" : self.scene.frame_current,
             "wm" : context.window_manager,
             "window" : context.window,
-            "path" : directory path to save animations,
+            "render_path": project Render Output path
+            "path" : directory path for creating temporary folders to save subframes
+                    and animation render results to,
             "format" : file format,
             "rlayers" : [ list of Render Layers nodes ],
             "composite" : composite output
@@ -398,7 +400,6 @@ class TMB_Store(bpy.types.Operator):
         _prj["base_name"] = bpy.path.display_name_from_filepath(
                                                             _prj["user_path"]
                                                             )
-        ######################################################################
         if not _prj["base_name"]:
             _prj["render_path"] = bpy.path.abspath(_prj["user_path"])
         else:
@@ -409,7 +410,6 @@ class TMB_Store(bpy.types.Operator):
             )
         _prj["path"] = bpy.path.abspath(
                             context.preferences.filepaths.temporary_directory)
-        ############################################################################
         _prj["format"] = self.scene.render.image_settings.file_format
         _rlscenes = self.get_rlayers_and_scenes()
         _prj["rlayers"] = _rlscenes[0]
