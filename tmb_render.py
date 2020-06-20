@@ -773,7 +773,7 @@ class TMB_Render(TMB_RenderHelpers, bpy.types.Operator):
                 _nt.nodes.remove(self.sc.node_tree.nodes['_TMB_Output'])
             _msg = "All render layers disabled for rendering. Can't render"
             bpy.ops.tmb.warning('INVOKE_DEFAULT', type = 'ERROR', msg=_msg)
-            return {'CANCELLED'}
+            return {'FINISHED'}
         self.get_frames()
         bpy.app.handlers.render_complete.append(self.handler_complete)
         bpy.app.handlers.render_pre.append(self.handler_pre)
